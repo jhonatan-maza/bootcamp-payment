@@ -24,8 +24,8 @@ public class PaymentController {
 	private PaymentService paymentService;
 
 	//Deposits search
-	@GetMapping("/findAllDeposits")
-	public Flux<Payment> findAllDeposits() {
+	@GetMapping("/findAllPayments")
+	public Flux<Payment> findAllPayments() {
 		Flux<Payment> payments = paymentService.findAll();
 		LOGGER.info("Registered payments: " + payments);
 		return payments;
@@ -49,8 +49,8 @@ public class PaymentController {
 
 	//Save deposit
 	@CircuitBreaker(name = "payments", fallbackMethod = "fallBackGetPayments")
-	@PostMapping(value = "/saveDeposits")
-	public Mono<Payment> saveDeposits(@RequestBody Payment dataPayment){
+	@PostMapping(value = "/savePayment")
+	public Mono<Payment> savePayment(@RequestBody Payment dataPayment){
 		Mono.just(dataPayment).doOnNext(t -> {
 					t.setTypeAccount("active");
 					t.setCreationDate(new Date());
@@ -65,8 +65,8 @@ public class PaymentController {
 
 	//Update deposit
 	@CircuitBreaker(name = "payments", fallbackMethod = "fallBackGetPayments")
-	@PutMapping("/updateDeposit/{numberTransaction}")
-	public Mono<Payment> updateDeposit(@PathVariable("numberTransaction") String numberTransaction,
+	@PutMapping("/updatePayment/{numberTransaction}")
+	public Mono<Payment> updatePayment(@PathVariable("numberTransaction") String numberTransaction,
 									   @Valid @RequestBody Payment dataPayment) {
 		Mono.just(dataPayment).doOnNext(t -> {
 
@@ -83,9 +83,9 @@ public class PaymentController {
 
 	//Delete deposit
 	@CircuitBreaker(name = "payments", fallbackMethod = "fallBackGetPayments")
-	@DeleteMapping("/deleteDeposits/{numberTransaction}")
-	public Mono<Void> deleteDeposits(@PathVariable("numberTransaction") String numberTransaction) {
-		LOGGER.info("Deleting deposit by number: " + numberTransaction);
+	@DeleteMapping("/deletePayment/{numberTransaction}")
+	public Mono<Void> deletePayment(@PathVariable("numberTransaction") String numberTransaction) {
+		LOGGER.info("Deleting payments by number: " + numberTransaction);
 		Mono<Void> delete = paymentService.deletePayment(numberTransaction);
 		return delete;
 
