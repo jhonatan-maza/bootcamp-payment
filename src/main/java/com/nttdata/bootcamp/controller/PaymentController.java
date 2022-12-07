@@ -52,7 +52,7 @@ public class PaymentController {
 	@PostMapping(value = "/saveDeposits")
 	public Mono<Payment> saveDeposits(@RequestBody Payment dataPayment){
 		Mono.just(dataPayment).doOnNext(t -> {
-
+					t.setTypeAccount("active");
 					t.setCreationDate(new Date());
 					t.setModificationDate(new Date());
 
@@ -70,7 +70,7 @@ public class PaymentController {
 									   @Valid @RequestBody Payment dataPayment) {
 		Mono.just(dataPayment).doOnNext(t -> {
 
-					t.setDepositNumber(numberTransaction);
+					t.setPaymentNumber(numberTransaction);
 					t.setModificationDate(new Date());
 
 				}).onErrorReturn(dataPayment).onErrorResume(e -> Mono.just(dataPayment))
